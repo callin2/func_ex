@@ -1,0 +1,9 @@
+//  pegjs --allowed-start-rules HintLine,Query  txLang.pegjs
+
+
+// (a:label1)-[:next]->(b:label2)  => (:newlabel  { id: , label2 : b.data } )
+// (a:label1)-[:next]->(b:label2)  => (:newlabel  { label2 : b.data } )
+// (a:label1)-[:next]->(b:label2)  => (:newlabel  { label2 : b.data } )
+
+
+TX = PATTERN s? "=>" S? RULE

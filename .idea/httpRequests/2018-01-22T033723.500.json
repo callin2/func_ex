@@ -1,0 +1,12 @@
+{
+  "error": {
+    "name": "error",
+    "length": 90,
+    "severity": "ERROR",
+    "code": "42601",
+    "position": "16",
+    "file": "scan.l",
+    "line": "1127",
+    "routine": "scanner_yyerror"
+  }
+}

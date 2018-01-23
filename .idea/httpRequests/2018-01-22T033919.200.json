@@ -1,0 +1,130 @@
+{
+  "command": "SELECT",
+  "rowCount": 2,
+  "oid": null,
+  "rows": [
+    {
+      "p": {
+        "vertices": [
+          {
+            "label": "customer",
+            "vid": {
+              "oid": "6",
+              "id": "92079"
+            },
+            "props": {
+              "ev_user_id": "USR0000001",
+              "ev_user_name": "KimCustomerC",
+              "ev_user_phoneno": "010-719-1717",
+              "ev_user_account_balance": "2566685"
+            }
+          },
+          {
+            "label": "transaction",
+            "vid": {
+              "oid": "7",
+              "id": "258973"
+            },
+            "props": {
+              "status": "confirmed",
+              "bc_tx_id": "fccdb527-db3d-4021-bb2a-7207421bcf13",
+              "kwh_price": "178.3",
+              "pay_amount": "4938",
+              "charge_amount": "27.7",
+              "ec_charge_end_time": "20171218000000",
+              "ec_charge_start_time": "20171217233000",
+              "ec_charge_evehicle_id": "VEH0002064"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "label": "request_from",
+            "eid": {
+              "oid": "8",
+              "id": "258988"
+            },
+            "svid": {
+              "oid": "6",
+              "id": "92079"
+            },
+            "evid": {
+              "oid": "7",
+              "id": "258973"
+            },
+            "props": {}
+          }
+        ]
+      }
+    },
+    {
+      "p": {
+        "vertices": [
+          {
+            "label": "customer",
+            "vid": {
+              "oid": "6",
+              "id": "92080"
+            },
+            "props": {
+              "ev_user_id": "USR0000003",
+              "ev_user_name": "LeeCustomerQ",
+              "ev_user_phoneno": "010-347-2996",
+              "ev_user_account_balance": "3065487"
+            }
+          },
+          {
+            "label": "transaction",
+            "vid": {
+              "oid": "7",
+              "id": "258974"
+            },
+            "props": {
+              "status": "confirmed",
+              "bc_tx_id": "7d3701c7-6b7b-4766-831e-b0b0580fe024",
+              "kwh_price": "178.3",
+              "pay_amount": "2781",
+              "charge_amount": "15.6",
+              "ec_charge_end_time": "20171218000000",
+              "ec_charge_start_time": "20171217233000",
+              "ec_charge_evehicle_id": "VEH0000460"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "label": "request_from",
+            "eid": {
+              "oid": "8",
+              "id": "258989"
+            },
+            "svid": {
+              "oid": "6",
+              "id": "92080"
+            },
+            "evid": {
+              "oid": "7",
+              "id": "258974"
+            },
+            "props": {}
+          }
+        ]
+      }
+    }
+  ],
+  "fields": [
+    {
+      "name": "p",
+      "tableID": 0,
+      "columnID": 0,
+      "dataTypeID": 7032,
+      "dataTypeSize": -1,
+      "dataTypeModifier": -1,
+      "format": "text"
+    }
+  ],
+  "_parsers": [
+    null
+  ],
+  "rowAsArray": false
+}

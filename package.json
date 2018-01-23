@@ -1,0 +1,31 @@
+{
+  "name": "func_ex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "agensgraph": "git+https://github.com/callin2/agensgraph-nodejs.git",
+    "d3": "^4.12.2",
+    "fluture": "^8.0.1",
+    "fp-ts": "^0.6.8",
+    "fp-ts-fluture": "^0.2.0",
+    "most": "^1.7.2",
+    "restify": "^6.3.4",
+    "restify-cors-middleware": "^1.1.0",
+    "superagent": "^3.8.2",
+    "transducers-js": "^0.4.174",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
+    "babel-core": "^6.26.0",
+    "license-webpack-plugin": "^1.1.1",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
+  }
+}

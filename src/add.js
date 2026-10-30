@@ -3,6 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const most_1 = require("most");
 const request = require("superagent");
 const agens_decode_1 = require("./agens_decode");
+const cyparser = require("./txLang.js");
+cyparser.parse("()=>a", { startRule: "TX" });
+cyparser.parse("(:label)=>a");
+cyparser.parse("(n1)=>a");
+cyparser.parse(`(n1 {"a":"aaa"})=>a`);
+cyparser.parse(`(n2:label {"a":"aaa"})=>a`);
+cyparser.parse(`(n2:label {"a":"aaa", "b":55})=>a`);
+cyparser.parse("[]=>link");
+cyparser.parse("[:label]=>link");
+cyparser.parse("[r1]=>link");
+cyparser.parse(`[r1 {"a":"xx"}]=>link`);
+cyparser.parse(`[r1:label  {"a":"xx"}]=>link`);
 let query2fetch = function (query) {
     console.log('query2fetch', query);
     return fetch('http://localhost:8888/api/v1/query', {
@@ -39,8 +51,8 @@ class MiniGraphDB {
     }
     insert(ele) {
         if (agens_decode_1.isGraphEdge(ele)) {
-            this.store.allEdges.push(ele);
             this.store.edges_idx[ele.data.id] = ele;
+            this.store.allEdges.push(ele);
             ele.data.labels.forEach(lbl => {
                 let labelIdx = this.store.edge_label_idx[lbl];
                 if (!labelIdx)
@@ -49,8 +61,8 @@ class MiniGraphDB {
             });
         }
         else if (agens_decode_1.isGraphNode(ele)) {
-            this.store.allNodes.push(ele);
             this.store.nodes_idx[ele.data.id] = ele;
+            this.store.allNodes.push(ele);
             ele.data.labels.forEach(lbl => {
                 let labelIdx = this.store.node_label_idx[lbl];
                 if (!labelIdx)
@@ -59,17 +71,29 @@ class MiniGraphDB {
             });
         }
     }
+    toString() {
+        console.log(`total ${this.store.allEdges.lenth} edges and ${this.store.allNodes.lenth} nodes stores!`);
+    }
+    transform(ruleStr) {
+        cyparser.parse(ruleStr);
+    }
 }
 var db = new MiniGraphDB();
-$graphElem.subscribe({
-    next: (value) => {
-        console.log(value);
-        db.insert(value);
-    },
-    error: (err) => { },
-    complete: (value) => {
-    }
-});
+// $graphElem.subscribe({
+//     next: (value: GraphElem)=>{
+//         console.log(value)
+//         db.insert(value)
+//     },
+//     error: (err: Error)=>{},
+//     complete: (value?)=>{
+//         console.log(db)
+//
+//
+//         // db.transform("() => a")
+//
+//
+//     }
+// });
 /*
 
 MATCH (n2:block)-[r2:next*..2]->(n3:block)

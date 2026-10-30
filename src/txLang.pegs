@@ -1,9 +1,78 @@
-//  pegjs --allowed-start-rules HintLine,Query  txLang.pegjs
+//  pegjs --allowed-start-rules TX,NODE  txLang.pegjs
 
 
 // (a:label1)-[:next]->(b:label2)  => (:newlabel  { id: , label2 : b.data } )
 // (a:label1)-[:next]->(b:label2)  => (:newlabel  { label2 : b.data } )
 // (a:label1)-[:next]->(b:label2)  => (:newlabel  { label2 : b.data } )
 
+{
 
-TX = PATTERN s? "=>" S? RULE
+    var noop = ()=>true
+}
+
+
+TX = pattern:PATTERN S? "=>" S? rule:RULE {console.log({pattern, rule})}
+
+PATTERN = p:PATH / e:EDGE / n0:NODE  {return n0}
+
+NODE = n1:EMPTY_NODE / n1:NONAME_NODE / n1:NAMED_NODE {return n1}
+
+EMPTY_NODE = "(" S? ")"   { return {type:'$node' , predicate: true} }
+NONAME_NODE = "(" S? label:LABEL?  S? query:Object? ")"  { return {type:'$node' , predicate: {'label':label, query} } }
+NAMED_NODE = "(" name:Id? S? label:LABEL?  S? query:Object? ")"   { return {type:'$node', name, predicate: {'label':label, query} } }
+EDGE = EMPTY_EDGE / NONAME_EDGE / NAMED_EDGE
+
+EMPTY_EDGE = "[" S? "]"
+NONAME_EDGE = "[" S? label:LABEL? S? Object? "]"
+NAMED_EDGE = "[" name:Id? S? label:LABEL?   S? Object? "]"
+
+PATH = NODE S? ( PARTIAL_PATH )+
+PARTIAL_PATH = LEFT_PATH / RIGHT_PATH / BI_PATH
+
+LEFT_PATH = "-" S? EDGE S? "->" S? NODE
+RIGHT_PATH = "<-" S? EDGE S? "-" S? NODE
+BI_PATH = "-" S? EDGE S? "-" S? NODE
+
+LABEL = ":" label:Id   { return label }
+
+RULE = Id
+
+Id = ([_\$A-Za-z][_\$0-9A-Za-z]*) { return text(); }
+
+
+
+JSON = S? ( Object / Array / String / True / False / Null / Number ) S?
+
+Object = "{"
+             ( String ":" JSON ( "," String ":" JSON )*
+             / S? )
+         "}"  { return JSON.parse(text()); }
+
+Array = "["
+            ( JSON ( "," JSON )*
+            / S? )
+        "]"
+
+String = S? ["] ( Escape / [^"\u0000-\u001F] )* ["] S?
+
+Escape = [\\] ( ["] / [/] / [\] / [b] / [f] / [n] / [r] / [t] / UnicodeEscape )
+
+UnicodeEscape = "u" [0-9A-Fa-f]{4}
+
+True = "true"
+
+False = "false"
+
+Null = "null"
+
+Number = (Minus? IntegralPart FractionalPart? ExponentPart?)
+
+Minus = "-"
+
+IntegralPart = "0" / [1-9] [0-9]*
+
+FractionalPart = "." [0-9]+
+
+ExponentPart = ( "e" / "E" ) ( "+" / "-" )? [0-9]+
+
+S = [\u0009\u000A\u000D\u0020]+

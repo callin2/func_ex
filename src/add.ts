@@ -1,7 +1,20 @@
 import {from, unfold, fromPromise, of, Subscription} from 'most'
 import * as request from 'superagent'
 import {ag_decode, GraphEdge, GraphElem, GraphNode, isGraphEdge, isGraphNode} from "./agens_decode";
+import * as cyparser from "./txLang.js"
 
+cyparser.parse("()=>a", {startRule: "TX"});
+cyparser.parse("(:label)=>a");
+cyparser.parse("(n1)=>a");
+cyparser.parse(`(n1 {"a":"aaa"})=>a`);
+cyparser.parse(`(n2:label {"a":"aaa"})=>a`);
+cyparser.parse(`(n2:label {"a":"aaa", "b":55})=>a`);
+
+cyparser.parse("[]=>link");
+cyparser.parse("[:label]=>link");
+cyparser.parse("[r1]=>link");
+cyparser.parse(`[r1 {"a":"xx"}]=>link`);
+cyparser.parse(`[r1:label  {"a":"xx"}]=>link`);
 
 let query2fetch = function(query): Promise<Response> {
     console.log('query2fetch', query)
@@ -50,8 +63,8 @@ class MiniGraphDB {
 
     public insert(ele: GraphElem) {
         if(isGraphEdge(ele)) {
-            this.store.allEdges.push(ele);
             this.store.edges_idx[ele.data.id] = ele;
+            this.store.allEdges.push(ele);
 
             ele.data.labels.forEach(lbl=>{
                 let labelIdx = this.store.edge_label_idx[lbl]
@@ -59,8 +72,9 @@ class MiniGraphDB {
                 labelIdx[ele.data.id] = ele
             });
         }else if(isGraphNode(ele)) {
-            this.store.allNodes.push(ele);
             this.store.nodes_idx[ele.data.id] = ele;
+            this.store.allNodes.push(ele);
+
 
             ele.data.labels.forEach(lbl=>{
                 let labelIdx = this.store.node_label_idx[lbl]
@@ -69,19 +83,38 @@ class MiniGraphDB {
             });
         }
     }
+
+    public toString() {
+        console.log(`total ${this.store.allEdges.lenth} edges and ${this.store.allNodes.lenth} nodes stores!`)
+    }
+
+
+    public transform(ruleStr) {
+        cyparser.parse(ruleStr)
+
+    }
 }
 
 var db = new MiniGraphDB()
 
-$graphElem.subscribe({
-    next: (value: GraphElem)=>{
-        console.log(value)
-        db.insert(value)
-    },
-    error: (err: Error)=>{},
-    complete: (value?)=>{
-    }
-});
+
+
+// $graphElem.subscribe({
+//     next: (value: GraphElem)=>{
+//         console.log(value)
+//         db.insert(value)
+//     },
+//     error: (err: Error)=>{},
+//     complete: (value?)=>{
+//         console.log(db)
+//
+//
+//         // db.transform("() => a")
+//
+//
+//     }
+// });
+
 
 
 /*
